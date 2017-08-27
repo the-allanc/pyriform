@@ -1,0 +1,23 @@
+language: python
+python:
+- 2.7
+- 3.6
+install:
+- pip install -r requirements-dev.txt
+- pip install coveralls pytest-cov pytest-pep8
+script:
+- py.test tests/ --cov skeleton/ --pep8
+branches:
+  except:
+  - skeleton
+deploy:
+  provider: pypi
+  server: https://test.pypi.org/legacy/
+  on:
+    tags: true
+    all_branches: true
+  user: amc6010
+  # supply password with `travis encrypt --add deploy.password`
+  distributions: dists
+after_success:
+- coveralls
