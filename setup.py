@@ -1,8 +1,5 @@
 #!/usr/bin/env python
 
-# Project skeleton maintained at https://github.com/the-allanc/skeleton
-# All the hard work done by jaraco at https://github.com/jaraco/skeleton
-
 #
 # Extract the project identity from the README.
 #
@@ -37,7 +34,6 @@ description = get_description()
 params = dict(
     name=name,
     version='0.1', # Remove if not using bumpversion.
-    use_scm_version=True, # Remove if not using setuptools_scm.
     author="Allan Crooks",
     author_email="allan@increment.one",
     description=summary or name,
@@ -45,7 +41,7 @@ params = dict(
     license='MIT',
     url=url,
     keywords=[],
-    packages=setuptools.find_packages(exclude=['tests']),
+    py_modules=['pyriform'],
     include_package_data=True,
     namespace_packages=name.split('.')[:-1],
     python_requires='>=2.7',
@@ -67,11 +63,10 @@ params = dict(
         ],
     },
     setup_requires=[
-        'setuptools_scm>=1.15.0', # Remove if not using setuptools_scm.
     ],
     classifiers=[
-        #"Development Status :: 3 - Alpha",
-        "Development Status :: 4 - Beta",
+        "Development Status :: 3 - Alpha",
+        #"Development Status :: 4 - Beta",
         #"Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
@@ -80,6 +75,7 @@ params = dict(
         "Programming Language :: Python :: 3",
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware',
     ],
     entry_points={
     },

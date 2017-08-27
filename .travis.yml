@@ -6,13 +6,13 @@ install:
 - pip install -r requirements-dev.txt
 - pip install coveralls pytest-cov pytest-pep8
 script:
-- py.test tests/ --cov skeleton/ --pep8
+- py.test tests/ --cov pyriform/ --pep8
 branches:
   except:
   - skeleton
 deploy:
   provider: pypi
-  server: https://test.pypi.org/legacy/
+  server: https://upload.pypi.org/legacy/
   on:
     tags: true
     all_branches: true

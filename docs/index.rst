@@ -10,23 +10,7 @@
 API
 ***
 
-..
-.. If you have want multiple documents to form your API, then modify
-.. the below document instead and link to that.
-..
-
-.. toctree::
-    :maxdepth: 1
-
-.. first_document_here - just uncomment
-.. second_document_here - just uncomment
-
-..
-.. Otherwise, if it's a simple module and you want to embed it inline,
-.. then update the name of the module here and use that instead.
-..
-
-.. automodule:: ~~skeleton~~
+.. automodule:: pyriform
     :members:
     :undoc-members:
     :show-inheritance:
