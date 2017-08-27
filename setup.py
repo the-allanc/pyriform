@@ -48,12 +48,14 @@ params = dict(
     install_requires=[
         'requests',
         'six',
+        'webtest',
     ],
     extras_require={
         'testing': [
             'pytest>=2.8',
             'pytest-sugar',
             'pytest-pep8',
+            'httpbin',
         ],
         'docs': [
             'sphinx',
