@@ -108,8 +108,14 @@ class TestPyriform(object):
         assert jresp['url'] == url
         assert jresp['data'] == ''
 
-    def test_status_code(self):
-        pass
+    @pytest.mark.parametrize('status,reason', [
+        (200, 'OK'), (404, 'NOT FOUND'), (410, 'GONE'), (502, 'BAD GATEWAY'),
+    ])
+    def test_status_code(self, status, reason):
+        url = 'http://myapp.local/status/%s' % status
+        resp = self.session.get(url)
+        assert resp.status_code == status
+        assert resp.reason == reason
 
     def test_response_headers(self):
         pass
@@ -131,7 +137,4 @@ class TestPyriform(object):
         pass
 
     def test_environ_headers(self):
-        pass
-
-    def test_files(self):
         pass

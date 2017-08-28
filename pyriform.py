@@ -28,7 +28,7 @@ class WSGIAdapter(BaseAdapter):
         with_body_methods = set('POST PUT PATCH'.split())
 
         wtparams = dict(headers=request.headers, extra_environ=environ,
-                        url=request.url)
+                        url=request.url, expect_errors=True)
         if request.method in with_body_methods:
             wtparams['params'] = request.body
 
@@ -48,7 +48,7 @@ class WSGIAdapter(BaseAdapter):
         # Convert the response.
         resp = Response()
         resp.status_code = wtresp.status_code
-        resp.reason = wtresp.status.split(' ')[1]
+        resp.reason = wtresp.status.split(' ', 1)[1]
         resp.url = request.url
 
         for key, value in wtresp.headerlist:
