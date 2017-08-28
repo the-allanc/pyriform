@@ -118,17 +118,29 @@ class TestPyriform(object):
         assert resp.reason == reason
 
     def test_response_headers(self):
-        pass
+        # Test that we get a header back in the response, but duplicate headers
+        # shouldn't cause anything to break. Requests doesn't seem to support
+        # duplicate headers in the response anyway.
+        url = 'http://myapp.local/response-headers?X-Men=Xavier&X-Men=Cyclops'
+        resp = self.session.get(url)
+        resp.raise_for_status()
+        assert resp.headers['X-Men'] in ('Xavier', 'Cyclops')
 
-    def test_redirect(self):
-        '''
-        /redirect/:n 302 Redirects n times.
-        /redirect-to?url=foo 302 Redirects to the foo URL.
-        /redirect-to?url=foo&status_code=307 307 Redirects to the foo URL.
-        /relative-redirect/:n 302 Relative redirects n times.
-        /absolute-redirect/:n 302 Absolute redirects n times.
-        '''
-        pass
+    @pytest.mark.parametrize('redir_type', [
+        'relative-redirect', 'absolute-redirect',
+    ])
+    def test_redirect(self, redir_type):
+        url = 'http://myapp.local/' + redir_type + '/3'
+        resp = self.session.get(url)
+        resp.raise_for_status()
+
+        # We should have been redirected to this URL.
+        assert resp.url == 'http://myapp.local/get'
+
+        # And the other responses should be present.
+        assert resp.history[0].url == url
+        assert resp.history[1].url == 'http://myapp.local/' + redir_type + '/2'
+        assert resp.history[2].url == 'http://myapp.local/' + redir_type + '/1'
 
     def test_stream(self):
         pass
