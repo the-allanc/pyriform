@@ -149,4 +149,24 @@ class TestPyriform(object):
         pass
 
     def test_environ_headers(self):
-        pass
+        # Force the app to have extra environment settings by default.
+        environ = {'HTTP_X_FORWARDED_FOR': '123.123.456.123'}
+        adapter = WSGIAdapter(binapp, environ)
+        sess = Session()
+        sess.mount('http://', adapter)
+
+        url = 'http://myapp.local/anything?high=low'
+        resp = sess.get(url)
+        assert resp.json()['origin'] == '123.123.456.123'
+
+    def test_environ_headers_http_host(self):
+        # Although we do set HTTP_HOST in Pyriform itself, don't let us
+        # override an explicit setting given by the client code.
+        environ = {'HTTP_HOST': 'yourapp.local'}
+        adapter = WSGIAdapter(binapp, environ)
+        sess = Session()
+        sess.mount('http://', adapter)
+
+        url = 'http://myapp.local/anything?back=front'
+        resp = sess.get(url)
+        assert resp.json()['url'] == url.replace('myapp', 'yourapp')

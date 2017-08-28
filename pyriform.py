@@ -6,10 +6,13 @@ __all__ = ['WSGIAdapter']
 
 class WSGIAdapter(BaseAdapter):
     
-    def __init__(self, app):
+    def __init__(self, app, extra_environ=None):
         super(BaseAdapter, self).__init__()
         if not isinstance(app, TestApp):
-            app = TestApp(app)
+            app = TestApp(app, extra_environ=extra_environ)
+        elif extra_environ:
+            raise ValueError('cannot pass extra_environ and a TestApp instance'
+                             ' at the same time')
         self.app = app
         
     def send(self, request, stream=False, timeout=None, verify=True,
@@ -20,9 +23,12 @@ class WSGIAdapter(BaseAdapter):
         # webob will include the port into the HTTP_HOST header by default.
         #
         # It's not desirable, so let's insert it into the environment
-        # manually.
-        parsed = urlparse(request.url)
-        environ = {'HTTP_HOST': parsed.netloc}
+        # manually. But only do this if the user hasn't set an explicit host
+        # name.
+        environ = {}
+        if 'HTTP_HOST' not in self.app.extra_environ:
+            parsed = urlparse(request.url)
+            environ['HTTP_HOST'] = parsed.netloc
 
         non_body_methods = set('GET HEAD DELETE OPTIONS'.split())
         with_body_methods = set('POST PUT PATCH'.split())
