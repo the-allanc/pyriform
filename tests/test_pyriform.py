@@ -142,11 +142,24 @@ class TestPyriform(object):
         assert resp.history[1].url == 'http://myapp.local/' + redir_type + '/2'
         assert resp.history[2].url == 'http://myapp.local/' + redir_type + '/1'
 
-    def test_stream(self):
-        pass
-
     def test_timeout(self):
-        pass
+        from requests import Timeout
+
+        url = 'http://myapp.local/delay/2'
+
+        # No timeout.
+        resp = self.session.get(url, timeout=None)
+        resp.raise_for_status()
+
+        # High timeouts - won't trigger an exception.
+        for timeout in [3, (1, 3)]:
+            resp = self.session.get(url, timeout=timeout)
+            resp.raise_for_status()
+
+        # Low timeouts - will trigger an exception.
+        for timeout in [1, (3, 1)]:
+            with pytest.raises(Timeout):
+                self.session.get(url, timeout=timeout)
 
     def test_environ_headers(self):
         # Force the app to have extra environment settings by default.

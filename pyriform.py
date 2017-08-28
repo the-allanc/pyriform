@@ -1,6 +1,8 @@
 from requests.adapters import BaseAdapter, Response
+from requests import Timeout
 from six.moves.urllib.parse import urlparse
 from webtest.app import TestApp
+import threading
 
 __all__ = ['WSGIAdapter']
 
@@ -48,8 +50,31 @@ class WSGIAdapter(BaseAdapter):
             wtparams['method'] = request.method
             handler = self.app._gen_request
 
-        # Execute the request.
-        wtresp = handler(**wtparams)
+        # We only care about the read timeout.
+        if isinstance(timeout, tuple):
+            _, timeout = timeout
+
+        # If there is a timeout, we'll execute it in a separate thread.
+        if timeout:
+            result = [None]
+            def invoke_request():
+                try:
+                    result[0] = handler(**wtparams)
+                except Exception as e:
+                    result[0] = e
+
+            thread = threading.Thread(target=invoke_request)
+            thread.start()
+            thread.join(timeout=timeout)
+            if thread.is_alive():
+                raise Timeout()
+            if isinstance(result[0], Exception):
+                raise result[0]
+            wtresp = result[0]
+
+        else:
+            # Handle synchronously.
+            wtresp = handler(**wtparams)
 
         # Convert the response.
         resp = Response()
