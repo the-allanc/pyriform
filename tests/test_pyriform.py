@@ -80,7 +80,7 @@ class TestPyriform(object):
         resp_files = resp.json()['files']
         assert 'background' in resp_files
         assert resp_files['background'] == \
-               'data:application/octet-stream;base64,' + bg_base64
+            'data:application/octet-stream;base64,' + bg_base64
 
     def test_other_methods(self):
         pass
@@ -115,4 +115,3 @@ class TestPyriform(object):
 
     def test_files(self):
         pass
-
