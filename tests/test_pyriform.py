@@ -1,6 +1,7 @@
 from httpbin import app as binapp
 from pyriform import WSGIAdapter
 from requests import Session
+from webtest.app import TestApp
 import pytest
 
 
@@ -183,3 +184,11 @@ class TestPyriform(object):
         url = 'http://myapp.local/anything?back=front'
         resp = sess.get(url)
         assert resp.json()['url'] == url.replace('myapp', 'yourapp')
+
+    def test_cannot_mix_testapp_and_environ(self):
+        # You can wrap an application with the testapp library, but don't
+        # do that *and* try to set an environment together.
+        WSGIAdapter(TestApp(binapp))  # This is allowed.
+
+        with pytest.raises(ValueError):
+            WSGIAdapter(TestApp(binapp), {'HTTP_HOST': 'thisapp.local'})

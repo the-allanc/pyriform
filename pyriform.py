@@ -7,7 +7,7 @@ import threading
 __all__ = ['WSGIAdapter']
 
 class WSGIAdapter(BaseAdapter):
-    
+
     def __init__(self, app, extra_environ=None):
         super(BaseAdapter, self).__init__()
         if not isinstance(app, TestApp):
@@ -16,7 +16,7 @@ class WSGIAdapter(BaseAdapter):
             raise ValueError('cannot pass extra_environ and a TestApp instance'
                              ' at the same time')
         self.app = app
-        
+
     def send(self, request, stream=False, timeout=None, verify=True,
              cert=None, proxies=None):
 
@@ -54,27 +54,7 @@ class WSGIAdapter(BaseAdapter):
         if isinstance(timeout, tuple):
             _, timeout = timeout
 
-        # If there is a timeout, we'll execute it in a separate thread.
-        if timeout:
-            result = [None]
-            def invoke_request():
-                try:
-                    result[0] = handler(**wtparams)
-                except Exception as e:
-                    result[0] = e
-
-            thread = threading.Thread(target=invoke_request)
-            thread.start()
-            thread.join(timeout=timeout)
-            if thread.is_alive():
-                raise Timeout()
-            if isinstance(result[0], Exception):
-                raise result[0]
-            wtresp = result[0]
-
-        else:
-            # Handle synchronously.
-            wtresp = handler(**wtparams)
+        wtresp = self._invoke_handler(handler, wtparams, timeout)
 
         # Convert the response.
         resp = Response()
@@ -89,3 +69,25 @@ class WSGIAdapter(BaseAdapter):
         resp.request = request
         resp._content = wtresp.body
         return resp
+
+    def _invoke_handler(self, handler, params, timeout):
+        # Handle synchronously if there's no timeout.
+        if not timeout:
+            return handler(**params)
+
+        # If there is a timeout, we'll execute it in a separate thread.
+        result = [None]
+        def invoke_request():
+            try:
+                result[0] = handler(**params)
+            except Exception as e: # pragma: no cover
+                result[0] = e
+
+        thread = threading.Thread(target=invoke_request)
+        thread.start()
+        thread.join(timeout=timeout)
+        if thread.is_alive():
+            raise Timeout()
+        if isinstance(result[0], Exception): # pragma: no cover
+            raise result[0]
+        return result[0]
