@@ -1,6 +1,7 @@
 from httpbin import app as binapp
 from pyriform import WSGIAdapter
 from requests import Session
+import pytest
 
 
 class TestPyriform(object):
@@ -82,11 +83,30 @@ class TestPyriform(object):
         assert resp_files['background'] == \
             'data:application/octet-stream;base64,' + bg_base64
 
-    def test_other_methods(self):
-        pass
+    @pytest.mark.parametrize('method,with_body', [
+        ('HEAD', False), ('DELETE', False), ('OPTIONS', False),
+        ('PUT', True), ('PATCH', True),
 
-    def test_unknown_method(self):
-        pass
+        # We want to test that we work with custom methods, but none of the
+        # httpbin handlers seem to allow for that - but we can use the "TRACE"
+        # method (which doesn't have a direct handler on the app, but is listed
+        # as an allowed method, so we can use it).
+        ('TRACE', False),
+    ])
+    def test_other_methods(self, method, with_body):
+        the_bytes = b'123456' if with_body else None
+        url = 'http://myapp.local/anything/blah?yes=no'
+        resp = self.session.request(method, url, data=the_bytes)
+        resp.raise_for_status()
+
+        if method in ('HEAD', 'OPTIONS'):
+            assert not resp.content, 'response had unexpected content'
+            return
+
+        jresp = resp.json()
+        assert jresp['method'] == method
+        assert jresp['url'] == url
+        assert jresp['data'] == ''
 
     def test_status_code(self):
         pass

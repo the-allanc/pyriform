@@ -37,8 +37,10 @@ class WSGIAdapter(BaseAdapter):
             request.method in with_body_methods:
             handler = getattr(self.app, request.method.lower())
         else:
-            # Sort this out later.
-            raise NotImplementedError(request.method)
+            # This is an internal method, but most handlers delegate to it, so
+            # we'll just make use of it for unknown methods.
+            wtparams['method'] = request.method
+            handler = self.app._gen_request
 
         # Execute the request.
         wtresp = handler(**wtparams)
