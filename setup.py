@@ -56,6 +56,7 @@ params = dict(
             'pytest-sugar',
             'pytest-pep8',
             'httpbin',
+            'cherrypy',
         ],
         'docs': [
             'sphinx',

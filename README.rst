@@ -38,7 +38,40 @@
 .. _requests: http://python-requests.org
 .. _webtest: https://docs.pylonsproject.org/projects/webtest/
 
-Using the Requests_ library and the WebTest_ library, you can use Pyriform to use the requests library to test your WSGI app without needing to have it running on the network - it bonds these two components of the web together.
+Linking the Requests_ library and the WebTest_ library together, you can use Pyriform to use the requests library to test your WSGI app without needing to have it running on the network; it bonds these two web components together.
+
+It's useful for testing purposes, and is both Python 2 and 3 compatible.
+
+Example Usage
+=============
+
+.. _cherrypy: http://www.cherrypy.org
+
+Here's an example with a small WSGI app (in this case, using CherryPy_), and how we can use Pyriform to connect to it::
+
+    >>> # Create the WSGI app.
+    >>>
+    >>> import cherrypy
+    >>>
+    >>> class SayHello(object):
+    ...
+    ...     @cherrypy.expose
+    ...     def default(self, word):
+    ...         return "Hello %s from %s!" % (word, cherrypy.request.headers['X-Location'])
+    ...
+    >>> cherrypy.config.update({'environment': 'embedded'})  # Suppress logging output.
+    >>> app = cherrypy.tree.mount(SayHello(), '/')
+    >>>
+    >>> # Now use Pyriform to map requests from a particular URL to this app.
+    >>>
+    >>> import pyriform
+    >>> import requests
+    >>> adapter = pyriform.WSGIAdapter(app)
+    >>> session = requests.Session()
+    >>> session.mount('http://helloapp/', adapter)
+    >>> resp = session.get('http://helloapp/World', headers={'X-Location': 'London'})
+    >>> print (resp.text)
+    "Hello World from London!"
 
 |Docs| |Release Version| |Python Version| |License| |Build Status| |Coverage| |Code Climate|
 
