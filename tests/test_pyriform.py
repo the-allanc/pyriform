@@ -1,7 +1,6 @@
 from httpbin import app as binapp
 from pyriform import WSGIAdapter
 from requests import Session
-from webtest.app import TestApp
 import pytest
 
 
@@ -186,6 +185,8 @@ class TestPyriform(object):
         assert resp.json()['url'] == url.replace('myapp', 'yourapp')
 
     def test_cannot_mix_testapp_and_environ(self):
+        from webtest.app import TestApp
+
         # You can wrap an application with the testapp library, but don't
         # do that *and* try to set an environment together.
         WSGIAdapter(TestApp(binapp))  # This is allowed.

@@ -68,8 +68,7 @@ params = dict(
     setup_requires=[
     ],
     classifiers=[
-        "Development Status :: 3 - Alpha",
-        #"Development Status :: 4 - Beta",
+        "Development Status :: 4 - Beta",
         #"Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
