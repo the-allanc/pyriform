@@ -62,6 +62,7 @@ params = dict(
             'jaraco.packaging>=3.2',
             'rst.linker>=1.9',
             'allanc-sphinx[yeen]',
+            'collective.checkdocs',
         ],
     },
     setup_requires=[
