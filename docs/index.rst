@@ -1,6 +1,9 @@
 .. include:: ../README.rst
   :end-before: all-content-above-will-be-included-in-sphinx-docs
 
+References
+----------
+
 .. toctree::
    :maxdepth: 1
 
@@ -8,12 +11,9 @@
    setup
 
 API
-***
+---
 
-.. automodule:: pyriform
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autoclass:: pyriform.WSGIAdapter
 
 
 Indices and tables

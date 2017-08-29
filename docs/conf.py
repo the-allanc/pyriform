@@ -16,7 +16,11 @@ extensions = [
 
 master_doc = 'index'
 autodoc_member_order = 'bysource'
-intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'requests': ('http://docs.python-requests.org/en/stable/', None),
+    'webtest': ('https://docs.pylonsproject.org/projects/webtest/en/stable/', None),
+}
 
 # This allows the conf_as_extension module to be imported.
 import os

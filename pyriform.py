@@ -8,6 +8,20 @@ __all__ = ['WSGIAdapter']
 
 class WSGIAdapter(BaseAdapter):
 
+    '''A Requests adapter that will connect to a WSGI app.
+    
+    This object should be mounted as a transport adapter to a
+    :py:class:`~requests.Session` object to have all matching requests sent to
+    it; read more about using transport adapters :ref:`here <transport-adapters>`.
+    
+    Args:
+        app (WSGI application): The app to send requests to - this should be a
+            callable which takes two arguments: *environ* and *start_response*.
+            
+            Alternatively, you can pass a :py:class:`~webtest.app.TestApp` object.
+        extra_environ (dict of string -> string): Extra environment values that
+            the WSGI app will inherit for every request that it handles.
+    '''
     def __init__(self, app, extra_environ=None):
         super(BaseAdapter, self).__init__()
         if not isinstance(app, TestApp):
