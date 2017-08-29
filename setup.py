@@ -18,9 +18,8 @@ def get_definition(prefix):
 
 def get_description():
     d_start = '|summary|\n'
-    d_end = '.. all-content-above-will-be-included-in-sphinx-docs'
     i_start = readme.index(d_start) + len(d_start)
-    return readme[i_start:readme.index(d_end)].strip()
+    return readme[i_start:].strip()
 
 name = get_definition('.. |name| replace:: ')
 url = get_definition('.. _repository: ')
