@@ -1,5 +1,11 @@
 .. |name| replace:: pyriform
 .. |summary| replace:: Connect the requests library to your WSGI app without using sockets.
+
+|name|
+======
+
+|summary|
+
 .. _repository: https://github.com/the-allanc/pyriform/
 .. _documentation: https://pyriform.readthedocs.io/en/stable/
 .. _pypi: https://pypi.python.org/pypi/pyriform
@@ -20,7 +26,7 @@
 .. |Release Version| image:: https://img.shields.io/pypi/pyversions/pyriform.svg?style=flat
     :target: pypi_
     :alt: Release Version
-.. |Python Version| image:: https://img.shields.io/pypi/l/pyriform.svg?style=flat
+.. |Python Version| image:: https://img.shields.io/pypi/v/pyriform.svg?style=flat
     :target: pypi_
     :alt: Python Version
 .. |License| image:: https://img.shields.io/pypi/l/pyriform.svg?style=flat
@@ -29,11 +35,6 @@
 .. |Code Climate| image:: https://codeclimate.com/github/the-allanc/pyriform/badges/gpa.svg
     :target: codeclimate_
     :alt: Code Climate
-
-|name|
-======
-
-|summary|
 
 .. _requests: http://python-requests.org
 .. _webtest: https://docs.pylonsproject.org/projects/webtest/
