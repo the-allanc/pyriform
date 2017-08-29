@@ -37,7 +37,7 @@
     :alt: Code Climate
 
 .. _requests: http://python-requests.org
-.. _webitest: https://docs.pylonsproject.org/projects/webtest/
+.. _webtest: https://docs.pylonsproject.org/projects/webtest/
 
 Linking the Requests_ and WebTest_ libraries together, ``pyriform`` allows you to use the ``requests`` library to interact your WSGI app without needing to have it running on the network; it bonds these two web components together.
 
