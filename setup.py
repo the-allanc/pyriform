@@ -33,7 +33,7 @@ description = get_description()
 
 params = dict(
     name=name,
-    version='0.1', # Remove if not using bumpversion.
+    version='0.2', # Remove if not using bumpversion.
     author="Allan Crooks",
     author_email="allan@increment.one",
     description=summary or name,
