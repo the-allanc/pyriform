@@ -1,6 +1,7 @@
 from httpbin import app as binapp
 from pyriform import WSGIAdapter
 from requests import Session
+import cherrypy
 import pytest
 
 
@@ -193,3 +194,21 @@ class TestPyriform(object):
 
         with pytest.raises(ValueError):
             WSGIAdapter(TestApp(binapp), {'HTTP_HOST': 'thisapp.local'})
+
+    def test_custom_status_reason(self):
+        # We'll create a custom CherryPy app to do this.
+        class MyReason(object):
+            @cherrypy.expose
+            def default(self, reason_text):
+                cherrypy.response.status = '200 ' + reason_text
+
+        app = cherrypy.tree.mount(MyReason(), '/')
+
+        # Now use Pyriform to map requests from a particular URL to this app.
+        sess = Session()
+        sess.mount('http://app.local', WSGIAdapter(app))
+
+        resp = sess.get('http://app.local/Hi There')
+        assert resp.status_code == 200
+        assert resp.reason == 'Hi There'
+
