@@ -212,3 +212,24 @@ class TestPyriform(object):
         assert resp.status_code == 200
         assert resp.reason == 'Hi There'
 
+    @pytest.mark.parametrize('stream', [False, True])
+    def test_can_iterate(self, stream):
+        # This test shows that you can iterate over content.
+        resp = self.session.get('http://httpbin/image/png', stream=stream)
+        chunks = []
+        chunk_iterator = resp.iter_content(chunk_size=6)
+        for _, chunk in zip(range(3), chunk_iterator):
+            chunks.append(chunk)
+        expected = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00'
+        assert b''.join(chunks) == expected
+        chunks.extend(list(chunk_iterator))
+        assert len(b''.join(chunks)) == 8090
+
+    def test_can_use_raw(self):
+        # Like above, but we use the 'raw' attribute on the response instead
+        # of using iter_content. This only works when stream = True, we're
+        # not expected to work when stream = False.
+        resp = self.session.get('http://httpbin/image/png', stream=True)
+        data = resp.raw.read(18)
+        expected = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00'
+        assert data == expected

@@ -81,7 +81,7 @@ class WSGIAdapter(BaseAdapter):
                 resp.headers[key] = value
 
         resp.request = request
-        resp._content = wtresp.body
+        resp.raw = IterStringIO(wtresp._app_iter)
         return resp
 
     def _invoke_handler(self, handler, params, timeout):
@@ -105,3 +105,26 @@ class WSGIAdapter(BaseAdapter):
         if isinstance(result[0], Exception): # pragma: no cover
             raise result[0]
         return result[0]
+
+
+# Brilliant solution for this taken from here:
+#  https://stackoverflow.com/questions/12593576/adapt-an-iterator-to-behave-like-a-file-like-object-in-python/32020108#32020108
+class IterStringIO(TextIOBase):
+    def __init__(self, iterable):
+        self.iter = it.chain.from_iterable(iterable)
+
+    def not_newline(self, s):
+        return s not in {'\n', '\r', '\r\n'}
+
+    def read(self, n=None):
+        return bytearray(it.islice(self.iter, None, n))
+
+    def readline(self, n=None):
+        to_read = it.takewhile(self.not_newline, self.iter)
+        return bytearray(it.islice(to_read, None, n))
+
+    def close(self):
+        try:
+            del self.iter
+        except AttributeError:
+            pass
