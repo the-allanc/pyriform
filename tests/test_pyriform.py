@@ -115,7 +115,7 @@ class TestPyriform(object):
         url = 'http://myapp.local/status/%s' % status
         resp = self.session.get(url)
         assert resp.status_code == status
-        assert resp.reason == reason
+        assert resp.reason.upper() == reason
 
     def test_response_headers(self):
         # Test that we get a header back in the response, but duplicate headers
