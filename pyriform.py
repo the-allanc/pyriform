@@ -12,18 +12,19 @@ import threading
 
 __all__ = ['WSGIAdapter']
 
+
 class WSGIAdapter(BaseAdapter):
 
     '''A Requests adapter that will connect to a WSGI app.
-    
+
     This object should be mounted as a transport adapter to a
     :py:class:`~requests.Session` object to have all matching requests sent to
     it; read more about using transport adapters :ref:`here <transport-adapters>`.
-    
+
     Args:
         app (WSGI application): The app to send requests to - this should be a
             callable which takes two arguments: *environ* and *start_response*.
-            
+
             Alternatively, you can pass a :py:class:`~webtest.app.TestApp` object.
         extra_environ (dict of string -> string): Extra environment values that
             the WSGI app will inherit for every request that it handles.
@@ -63,11 +64,11 @@ class WSGIAdapter(BaseAdapter):
 
         if stream and not issubclass(self.app.RequestClass, PyriformTestRequest):
             warnings.warn('Passing a TestApp instance to WSGIAdapter prevents '
-                'streamed requests from streaming content in real time.')
+                          'streamed requests from streaming content in real time.')
 
         # Delegate to the appropriate handler if we have one.
         if request.method in non_body_methods or \
-            request.method in with_body_methods:
+                request.method in with_body_methods:
             handler = getattr(self.app, request.method.lower())
         else:
             # This is an internal method, but most handlers delegate to it, so
@@ -111,13 +112,13 @@ class WSGIAdapter(BaseAdapter):
         def invoke_request():
             try:
                 result[0] = handler(**params)
-            except Exception as e: # pragma: no cover
+            except Exception as e:  # pragma: no cover
                 result[0] = e
             else:
                 # This prevents the webtest linter from generating a warning about the iterable
                 # response not being closed properly.
-                if result[1]: # Request has been cancelled.
-                    iter_close(result[0]._app_iter) # Tidy up the request.
+                if result[1]:  # Request has been cancelled.
+                    iter_close(result[0]._app_iter)  # Tidy up the request.
 
         thread = threading.Thread(target=invoke_request)
         thread.start()
@@ -125,7 +126,7 @@ class WSGIAdapter(BaseAdapter):
         if thread.is_alive():
             result[1] = True  # tell the thread we don't want the result
             raise Timeout()
-        if isinstance(result[0], Exception): # pragma: no cover
+        if isinstance(result[0], Exception):  # pragma: no cover
             raise result[0]
         return result[0]
 
@@ -145,6 +146,7 @@ if six.PY2:
     _join_bytes = b''.join
 else:
     _join_bytes = bytearray
+
 
 # Brilliant solution for this taken from here (and then tweaked by me):
 #  https://stackoverflow.com/questions/12593576/adapt-an-iterator-to-behave-like-a-file-like-object-in-python/32020108#32020108
