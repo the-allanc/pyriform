@@ -68,7 +68,7 @@ params = dict(
             'collective.checkdocs',
         ],
     },
-    setup_requires=[
+    classifiers=[
         "Development Status :: 4 - Beta",
         # "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -80,8 +80,6 @@ params = dict(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Middleware',
     ],
-    entry_points={
-    },
 )
 
 if __name__ == '__main__':
