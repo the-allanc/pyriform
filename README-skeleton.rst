@@ -1,3 +1,5 @@
+.. SKELETON: This file should be removed from the repository.
+
 About
 =====
 
@@ -48,4 +50,7 @@ When integrating the skeleton into your project - the minimum changes required a
   - Update `.travis.yml` and change the files to look at for coverage when running `py.test`.
   - Add a description for the project (if required) in `README.rst`.
   - Modify the parameters of `setup.py` to remove one of the version parameters defining whether `bumpversion <https://github.com/peritus/bumpversion>`_ or `setuptools_scm <https://github.com/pypa/setuptools_scm>`_ is used for versioning.
+  - Also modify setup.py to indicate if the project is a single or multiple module project.
   - Update docs/index.rst and choose either the multi-document API approach or the inline API approach (if the latter, then update the name of the automodule being used).
+
+If this is done successfully, then there shouldn't be any mentions of the word ``SKELETON`` in any files (apart from `.travis.yml` which will indicate that it should be left).

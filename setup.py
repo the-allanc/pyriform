@@ -12,6 +12,7 @@ import setuptools
 with io.open('README.rst', encoding='utf-8') as readme:
     readme = readme.read()
 
+
 def get_definition(prefix):
     for line in readme.split('\n'):
         if line.startswith(prefix):
@@ -19,11 +20,12 @@ def get_definition(prefix):
     err = 'no line in README.rst with prefix {!r}'.format(prefix)
     raise AssertionError(err)
 
+
 def get_description():
     d_start = '|summary|\n'
-    d_end = '.. all-content-above-will-be-included-in-sphinx-docs'
     i_start = readme.index(d_start) + len(d_start)
-    return readme[i_start:readme.index(d_end)].strip()
+    return readme[i_start:].strip()
+
 
 name = get_definition('.. |name| replace:: ')
 url = get_definition('.. _repository: ')
@@ -36,8 +38,8 @@ description = get_description()
 
 params = dict(
     name=name,
-    version='0.1', # Remove if not using bumpversion.
-    use_scm_version=True, # Remove if not using setuptools_scm.
+    version='0.1',  # SKELETON: Remove if not using bumpversion.
+    use_scm_version=True,  # SKELETON: Remove if not using setuptools_scm.
     author="Allan Crooks",
     author_email="allan@increment.one",
     description=summary or name,
@@ -45,7 +47,8 @@ params = dict(
     license='MIT',
     url=url,
     keywords=[],
-    packages=setuptools.find_packages(exclude=['tests']),
+    py_modules=['SKELETON'],  # SKELETON: Remove if multiple module project.
+    packages=setuptools.find_packages(exclude=['tests']),  # SKELETON: Remove if single module.
     include_package_data=True,
     namespace_packages=name.split('.')[:-1],
     python_requires='>=2.7',
@@ -63,16 +66,17 @@ params = dict(
             'sphinx',
             'jaraco.packaging>=3.2',
             'rst.linker>=1.9',
-            'allanc-sphinx[yeen]',
+            'allanc-sphinx[yeen]>=0.2',
+            'collective.checkdocs',
         ],
     },
     setup_requires=[
-        'setuptools_scm>=1.15.0', # Remove if not using setuptools_scm.
+        'setuptools_scm>=1.15.0',  # SKELETON: Remove if not using setuptools_scm.
     ],
     classifiers=[
-        #"Development Status :: 3 - Alpha",
+        # "Development Status :: 3 - Alpha",
         "Development Status :: 4 - Beta",
-        #"Development Status :: 5 - Production/Stable",
+        # "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",

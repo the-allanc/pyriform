@@ -1,6 +1,14 @@
 .. include:: ../README.rst
   :end-before: all-content-above-will-be-included-in-sphinx-docs
 
+Project Home
+------------
+
+You can browse the source code and file issues at the project repository_.
+
+References
+----------
+
 .. toctree::
    :maxdepth: 1
 
@@ -8,7 +16,7 @@
    setup
 
 API
-***
+---
 
 ..
 .. If you have want multiple documents to form your API, then modify
@@ -26,7 +34,7 @@ API
 .. then update the name of the module here and use that instead.
 ..
 
-.. automodule:: ~~skeleton~~
+.. automodule:: SKELETON
     :members:
     :undoc-members:
     :show-inheritance:

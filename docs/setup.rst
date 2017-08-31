@@ -1,15 +1,15 @@
 Installing
 ----------
 
-.. _repo: |url|
+.. _virtualenv: http://docs.python-guide.org/en/latest/dev/virtualenvs/
 
 You can install |projname| using pip:
 
 .. parsed-literal::
-   
+
    pip install |projname|
 
-Or cloning the |projname| repository from the repo_, and in an `activated virtualenv <http://docs.python-guide.org/en/latest/>`_, run this command::
+Or you can clone the |projname| repository_, and in an activated virtualenv_, run this command::
 
     pip install .
 
@@ -17,21 +17,21 @@ Or cloning the |projname| repository from the repo_, and in an `activated virtua
 Developing
 ----------
 
-If you want to work on the project, clone the repository from the repo_, creating a `virtualenv <https://virtualenv.pypa.io/>`_, and running::
+If you want to work on the project, then clone the repository_, and after creating a virtualenv_, and run::
 
     pip install -r requirements-dev.txt
 
 Testing
 ~~~~~~~
 
-You can just `tox <https://tox.readthedocs.io/en/latest/>`_ to run tests::
+You can just `tox <https://tox.readthedocs.io/en/latest/>`_ to run the test suite::
 
     tox
-    
+
 Documentation
 ~~~~~~~~~~~~~
 
 You can generate documentation using `Sphinx <http://www.sphinx-doc.org>`_::
 
-    sphinx-build docs/ built-docs/
+    sphinx-build docs/ build/docs/
 
