@@ -79,6 +79,6 @@ Here's an example with a small WSGI app (in this case, using CherryPy_), and how
 
 .. all-content-above-will-be-included-in-sphinx-docs
 
-Full documentation can be found `here`__.
+You can browse the source code and file bug reports at the project repository_. Full documentation can be found `here`__.
 
 __ documentation_
