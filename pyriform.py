@@ -3,6 +3,7 @@ from io import TextIOBase
 from requests.adapters import BaseAdapter, Response
 from requests import Timeout
 from six.moves.urllib.parse import urlparse
+import six
 import warnings
 from webtest.app import TestApp, TestRequest
 from webtest.response import TestResponse
@@ -127,7 +128,12 @@ class PyriformTestRequest(TestRequest):
     ResponseClass = PyriformTestResponse
 
 
-# Brilliant solution for this taken from here:
+if six.PY2:
+    _join_bytes = b''.join
+else:
+    _join_bytes = bytearray
+
+# Brilliant solution for this taken from here (and then tweaked by me):
 #  https://stackoverflow.com/questions/12593576/adapt-an-iterator-to-behave-like-a-file-like-object-in-python/32020108#32020108
 class IterStringIO(TextIOBase):
     def __init__(self, iterable):
@@ -137,11 +143,11 @@ class IterStringIO(TextIOBase):
         return s not in {'\n', '\r', '\r\n'}
 
     def read(self, n=None):
-        return bytearray(it.islice(self.iter, None, n))
+        return _join_bytes(it.islice(self.iter, None, n))
 
     def readline(self, n=None):
         to_read = it.takewhile(self.not_newline, self.iter)
-        return bytearray(it.islice(to_read, None, n))
+        return _join_bytes(it.islice(to_read, None, n))
 
     def close(self):
         try:
