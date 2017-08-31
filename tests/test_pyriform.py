@@ -1,5 +1,6 @@
 from httpbin import app as binapp
-from pyriform import make_session, WSGIAdapter
+from pyriform import make_session
+from pyriform import WSGIAdapter
 from requests import Session
 import cherrypy
 import pytest
@@ -183,6 +184,7 @@ class TestPyriform(object):
             with pytest.raises(Timeout):
                 self.session.get(url, timeout=timeout)
 
+    @pyriform_only
     def test_environ_headers(self):
         # Force the app to have extra environment settings by default.
         environ = {'HTTP_X_FORWARDED_FOR': '123.123.456.123'}
