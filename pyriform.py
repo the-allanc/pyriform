@@ -7,6 +7,7 @@ import six
 import warnings
 from webtest.app import TestApp, TestRequest
 from webtest.response import TestResponse
+from webob.response import iter_close
 import threading
 
 __all__ = ['WSGIAdapter']
@@ -101,16 +102,28 @@ class WSGIAdapter(BaseAdapter):
 
         # If there is a timeout, we'll execute it in a separate thread.
         result = [None]
+        # As there is a timeout, we'll execute it in a separate thread.
+
+        # We store the result at index 0, and the current thread will signal to the
+        # spawned thread if it has cancelled its request at index 1.
+        result = [None, False]
+
         def invoke_request():
             try:
                 result[0] = handler(**params)
             except Exception as e: # pragma: no cover
                 result[0] = e
+            else:
+                # This prevents the webtest linter from generating a warning about the iterable
+                # response not being closed properly.
+                if result[1]: # Request has been cancelled.
+                    iter_close(result[0]._app_iter) # Tidy up the request.
 
         thread = threading.Thread(target=invoke_request)
         thread.start()
         thread.join(timeout=timeout)
         if thread.is_alive():
+            result[1] = True  # tell the thread we don't want the result
             raise Timeout()
         if isinstance(result[0], Exception): # pragma: no cover
             raise result[0]
@@ -137,6 +150,7 @@ else:
 #  https://stackoverflow.com/questions/12593576/adapt-an-iterator-to-behave-like-a-file-like-object-in-python/32020108#32020108
 class IterStringIO(TextIOBase):
     def __init__(self, iterable):
+        self.iterable = iterable
         self.iter = it.chain.from_iterable(iterable)
 
     def not_newline(self, s):
@@ -150,7 +164,7 @@ class IterStringIO(TextIOBase):
         return _join_bytes(it.islice(to_read, None, n))
 
     def close(self):
-        try:
+        if hasattr(self, 'iterable'):
+            iter_close(self.iterable)
+            del self.iterable
             del self.iter
-        except AttributeError:
-            pass
