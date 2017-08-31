@@ -1,4 +1,4 @@
 -e .[docs]
 -e .[testing]
 tox>=2.4
-
+flake8

@@ -9,6 +9,7 @@ import setuptools
 with io.open('README.rst', encoding='utf-8') as readme:
     readme = readme.read()
 
+
 def get_definition(prefix):
     for line in readme.split('\n'):
         if line.startswith(prefix):
@@ -16,10 +17,12 @@ def get_definition(prefix):
     err = 'no line in README.rst with prefix {!r}'.format(prefix)
     raise AssertionError(err)
 
+
 def get_description():
     d_start = '|summary|\n'
     i_start = readme.index(d_start) + len(d_start)
     return readme[i_start:].strip()
+
 
 name = get_definition('.. |name| replace:: ')
 url = get_definition('.. _repository: ')
@@ -61,15 +64,13 @@ params = dict(
             'sphinx',
             'jaraco.packaging>=3.2',
             'rst.linker>=1.9',
-            'allanc-sphinx[yeen]',
+            'allanc-sphinx[yeen]>=0.2',
             'collective.checkdocs',
         ],
     },
     setup_requires=[
-    ],
-    classifiers=[
         "Development Status :: 4 - Beta",
-        #"Development Status :: 5 - Production/Stable",
+        # "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",

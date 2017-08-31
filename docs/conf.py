@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import io
+import os
+import sys
 
 # Current preferred theme.
 html_theme = 'yeen'
@@ -23,8 +26,6 @@ intersphinx_mapping = {
 }
 
 # This allows the conf_as_extension module to be imported.
-import os
-import sys
 sys.path.append(os.path.dirname(__file__))
 
 link_files = {
@@ -48,3 +49,16 @@ link_files = {
         ],
     ),
 }
+
+# Extract the repository URL from the README.
+with io.open('../README.rst', encoding='utf-8') as readme:
+    repo_prefix = '.. _repository: '
+    repo_url = None
+    for line in readme.readlines():
+        if line.startswith(repo_prefix):
+            repo_url = line[len(repo_prefix):].strip()
+            break
+    del readme, repo_prefix, line
+
+if html_theme == 'yeen' and repo_url.startswith('https://github.com'):
+    html_theme_options = {'github_url': repo_url}

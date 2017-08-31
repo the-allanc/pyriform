@@ -74,6 +74,7 @@ Here's an example with a small WSGI app (in this case, using CherryPy_), and how
     >>> print (resp.text)
     Hello World from London!
 
+
 |Docs| |Release Version| |Python Version| |License| |Build Status| |Coverage| |Code Climate|
 
 .. all-content-above-will-be-included-in-sphinx-docs
