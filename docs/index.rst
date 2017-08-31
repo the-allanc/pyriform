@@ -13,7 +13,8 @@ References
 API
 ---
 
-.. autoclass:: pyriform.WSGIAdapter
+.. automodule:: pyriform
+    :members:
 
 
 Indices and tables

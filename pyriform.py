@@ -1,7 +1,7 @@
 import itertools as it
 from io import TextIOBase
 from requests.adapters import BaseAdapter, Response
-from requests import Timeout
+from requests import Session, Timeout
 from six.moves.urllib.parse import urlparse
 import six
 import warnings
@@ -10,7 +10,29 @@ from webtest.response import TestResponse
 from webob.response import iter_close
 import threading
 
-__all__ = ['WSGIAdapter']
+__all__ = ['WSGIAdapter', 'make_session']
+
+
+def make_session(app, prefix='http://app.local/'):
+    '''Convenience function for creating a session which maps the app to a particular URL.
+
+    If you need to have more control over the :py:class:`WSGIAdapter` instance that's created,
+    or you need to generate a session in a different way, then you can just do it manually.
+
+    Args:
+        app (WSGI application): The app to send requests to - this should be a
+            callable which takes two arguments: *environ* and *start_response*.
+
+            Alternatively, you can pass a :py:class:`~webtest.app.TestApp` object.
+        prefix (string): The URL prefix to mount the app to. Defaults to ``http://app.local/``.
+
+    Returns:
+        A :py:class:`~requests.Session` object which has the application mounted to the desired
+        URL prefix.
+    '''
+    session = Session()
+    session.mount(prefix, WSGIAdapter(app))
+    return session
 
 
 class WSGIAdapter(BaseAdapter):

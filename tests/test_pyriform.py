@@ -1,5 +1,5 @@
 from httpbin import app as binapp
-from pyriform import WSGIAdapter
+from pyriform import make_session, WSGIAdapter
 from requests import Session
 import cherrypy
 import pytest
@@ -41,6 +41,21 @@ class TestPyriform(object):
         # Use HTTPS - webtest should add the de-facto headers for indicating
         # HTTPS connections.
         assert_url('https://myapp4.local/anything/hello.world')
+
+    @pyriform_only
+    def test_make_session(self):
+
+        # Like above, but use make_session as the way to create a session.
+        def assert_url(session, the_url):
+            resp = session.get(the_url)
+            resp.raise_for_status()
+            assert resp.json()['url'] == the_url
+
+        sess = make_session(binapp)
+        assert_url(sess, 'http://app.local/anything/hello.me')
+
+        sess = make_session(binapp, 'http://this.test/')
+        assert_url(sess, 'http://this.test/anything/hello.you')
 
     def test_request_headers(self):
         headers = {'User-Agent': 'me', 'X-HeyBoy': 'HeyGirl'}
