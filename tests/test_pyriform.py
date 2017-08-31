@@ -4,6 +4,12 @@ from requests import Session
 import cherrypy
 import pytest
 
+# The tests are general enough that other adapter classes could be used instead, but some classes
+# are very specific to Pyriform, so we mark these tests.
+pyriform_only = pytest.mark.skipif(
+    WSGIAdapter.__module__ != 'pyriform',
+    reason='Test is only suitable for Pyriform WSGIAdapter only')
+
 
 class TestPyriform(object):
 
@@ -173,6 +179,7 @@ class TestPyriform(object):
         resp = sess.get(url)
         assert resp.json()['origin'] == '123.123.456.123'
 
+    @pyriform_only
     def test_environ_headers_http_host(self):
         # Although we do set HTTP_HOST in Pyriform itself, don't let us
         # override an explicit setting given by the client code.
@@ -185,6 +192,7 @@ class TestPyriform(object):
         resp = sess.get(url)
         assert resp.json()['url'] == url.replace('myapp', 'yourapp')
 
+    @pyriform_only
     def test_cannot_mix_testapp_and_environ(self):
         from webtest.app import TestApp
 
