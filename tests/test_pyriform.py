@@ -233,3 +233,22 @@ class TestPyriform(object):
         data = resp.raw.read(18)
         expected = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00'
         assert data == expected
+
+    def test_iterate_in_real_time(self):
+        # Show that we iterate over content as it is being emitted, and we're
+        # not just reading the entire content body first.
+        import time
+        then = time.time()
+
+        # We want the first four bytes - we should get them in under 2.5
+        # seconds (it should be fractionally more than 2).  If we are reading
+        # the entire content body in, it will take us at least 5 seconds to get
+        # the four bytes we want.
+        url = 'http://server/drip?duration=5&numbytes=10'
+        resp = self.session.get(url, stream=True)
+        assert len(resp.raw.read(4)) == 4
+
+        wait = time.time() - then
+        assert wait <= 5, 'all content is being read before streaming starts'
+        assert wait <= 2.5, 'reading content took longer than expected'
+        assert wait >= 1, 'resource did not appear to be delaying content'

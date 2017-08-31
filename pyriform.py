@@ -1,7 +1,11 @@
+import itertools as it
+from io import TextIOBase
 from requests.adapters import BaseAdapter, Response
 from requests import Timeout
 from six.moves.urllib.parse import urlparse
-from webtest.app import TestApp
+import warnings
+from webtest.app import TestApp, TestRequest
+from webtest.response import TestResponse
 import threading
 
 __all__ = ['WSGIAdapter']
@@ -26,6 +30,7 @@ class WSGIAdapter(BaseAdapter):
         super(BaseAdapter, self).__init__()
         if not isinstance(app, TestApp):
             app = TestApp(app, extra_environ=extra_environ)
+            app.RequestClass = PyriformTestRequest
         elif extra_environ:
             raise ValueError('cannot pass extra_environ and a TestApp instance'
                              ' at the same time')
@@ -53,6 +58,10 @@ class WSGIAdapter(BaseAdapter):
                         url=request.url, expect_errors=True)
         if request.method in with_body_methods:
             wtparams['params'] = request.body
+
+        if stream and not issubclass(self.app.RequestClass, PyriformTestRequest):
+            warnings.warn('Passing a TestApp instance to WSGIAdapter prevents '
+                'streamed requests from streaming content in real time.')
 
         # Delegate to the appropriate handler if we have one.
         if request.method in non_body_methods or \
@@ -105,6 +114,17 @@ class WSGIAdapter(BaseAdapter):
         if isinstance(result[0], Exception): # pragma: no cover
             raise result[0]
         return result[0]
+
+
+class PyriformTestResponse(TestResponse):
+
+    # This suppresses the entire body content being consumed before being
+    # returned.
+    body = property(lambda self: None)
+
+
+class PyriformTestRequest(TestRequest):
+    ResponseClass = PyriformTestResponse
 
 
 # Brilliant solution for this taken from here:
