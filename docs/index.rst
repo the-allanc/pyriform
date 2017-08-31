@@ -16,8 +16,8 @@ API
 .. automodule:: pyriform
     :members:
 
-Alternatives to Pyriform
-------------------------
+Alternatives
+------------
 
 .. _requests-wsgi-adapter: https://github.com/seanbrant/requests-wsgi-adapter
 .. _httpbin: https://httpbin.org/
