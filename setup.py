@@ -35,14 +35,14 @@ description = get_description()
 
 params = dict(
     name=name,
-    version='0.3', # Remove if not using bumpversion.
+    version='0.3',
     author="Allan Crooks",
     author_email="allan@increment.one",
     description=summary or name,
     long_description=description,
     license='MIT',
     url=url,
-    keywords=[],
+    keywords=['requests', 'wsgi'],
     py_modules=['pyriform'],
     include_package_data=True,
     namespace_packages=name.split('.')[:-1],
