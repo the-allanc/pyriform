@@ -123,8 +123,6 @@ class WSGIAdapter(BaseAdapter):
         if not timeout:
             return handler(**params)
 
-        # If there is a timeout, we'll execute it in a separate thread.
-        result = [None]
         # As there is a timeout, we'll execute it in a separate thread.
 
         # We store the result at index 0, and the current thread will signal to the
