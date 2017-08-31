@@ -46,17 +46,33 @@ class TestPyriform(object):
     @pyriform_only
     def test_make_session(self):
 
+        class JustSayOK(object):
+            @cherrypy.expose
+            def default(self, *args):
+                return 'OK'
+
+        ok_app = cherrypy.tree.mount(JustSayOK(), '/')
+
         # Like above, but use make_session as the way to create a session.
         def assert_url(session, the_url):
             resp = session.get(the_url)
             resp.raise_for_status()
             assert resp.json()['url'] == the_url
 
+        # Test default behaviour.
         sess = make_session(binapp)
         assert_url(sess, 'http://app.local/anything/hello.me')
 
+        # Test that the explicit mount prefix works.
         sess = make_session(binapp, 'http://this.test/')
+
+        # To prove it, link to a separate app on a different prefix.
+        sess.mount('http://that.test/', WSGIAdapter(ok_app))
+
         assert_url(sess, 'http://this.test/anything/hello.you')
+        resp = sess.get('http://that.test/just-say-ok')
+        resp.raise_for_status()
+        assert resp.text == 'OK'
 
     def test_request_headers(self):
         headers = {'User-Agent': 'me', 'X-HeyBoy': 'HeyGirl'}

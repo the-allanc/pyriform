@@ -13,7 +13,7 @@ import threading
 __all__ = ['WSGIAdapter', 'make_session']
 
 
-def make_session(app, prefix='http://app.local/'):
+def make_session(app, prefix='http://'):
     '''Convenience function for creating a session which maps the app to a particular URL.
 
     If you need to have more control over the :py:class:`WSGIAdapter` instance that's created,
@@ -24,7 +24,8 @@ def make_session(app, prefix='http://app.local/'):
             callable which takes two arguments: *environ* and *start_response*.
 
             Alternatively, you can pass a :py:class:`~webtest.app.TestApp` object.
-        prefix (string): The URL prefix to mount the app to. Defaults to ``http://app.local/``.
+        prefix (string): The URL prefix to mount the app to. Defaults to ``http://`` (e.g. for
+            all HTTP traffic).
 
     Returns:
         A :py:class:`~requests.Session` object which has the application mounted to the desired
