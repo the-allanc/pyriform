@@ -2,9 +2,8 @@ language: python
 python:
 - 2.7
 - 3.6
-# Check that all template lines from the skeleton project have been removed.
-#   Do NOT remove this when customising your project.
-before_install: ['! grep -R SKELETON | grep -v grep']
+before_install:
+- "! grep -R SKELETON | grep -v grep"
 install:
 - pip install -r requirements-dev.txt
 - pip install coveralls pytest-cov
@@ -26,6 +25,6 @@ deploy:
   user: amc6010
   distributions: dists
   password:
-    secure: nOx9qdUkT2LDUK2QQcReQ+woOl4OTnHJvp5Xw9+BCEGrdnVLC+cNCfw1eOTTbPbgFjnIyniAPs0C+/ESAQw+39BhFdbZF+ZEcvLez6Xi4B8acRMF7KYclKmwVAkSqs/gmOPk4wh7g9m3tBcID7qTbicOMA+OHbO9meroUw9azketa80PPF2/UxmElAU8HVKp5t6yx9dX+/7Xc4tI0GlJJzBsZm4SkRqkY6HhLhMseg+O+RAiK78D5inaBLQKSXB2D76GDR3Djq8HpVwzsM5A/rsKcpNb3DoCe+IkShBP0nmqUabFt+2+/6XrplIIzZR5mGDrcu/fwFBc5qAuRElrVW7QEUz3sdBwCCAf0AgsZbBqzRp26eJozU/CRa4WxAaMj0N3ELzLt3uNkD7SSMHmJ1s4xigD37C8Qvgjh/w8cvVd1odISvSu/k40niiVjGQBCqxRGtHKeUxw/6B+og3Xjb2UHMb5knXmrSCeQH7lnQYw7Bi73tceNLtcRVwdjl/LLxA2nWhkP36KYiU2/aaxjXPGnPk77PCa/W8L0luqytUdVVFBzX9TzcoPjN6jctEsWxTdbJTemQ+k+kWleeJrhm4nchjC5PVbZ0CMZLsBe4u/x/bFGV8bhKxw2A3rusLXOrfc5tO9emVBHgThWPNdlkJXOBU4W2BdHAzEDkGqGqE=
+    secure: BmnIBfsAQaSZ2ATRnJTFK3FuSu5YCHPVF3v/NugWy7KvbidpeIfbAix1btGntMlnbWkp47fbgXCKffAF/Dt/PCYIyCV85WmlDPPa471DLHOwRsHGf4GWgeS7IfZZNUkoP8uY4jsy0kCK4HXSzcfWJ/95mm+ESX6eyb8174ewyji2szseFWi13t/h6vlOovmCJwfZOlOlMz85JngxeANodTqKBhjzK0ljspj9+3i6O9jQdMHxubiIQdqtcJUtl7qiQZcvAHiIutuUW2A2TBDr76gF6LAbQxBnIZqv6OZZXbjDKbVySnmusjMAC/lkWFFrEr0kphkWcWMciO/+aEkHffvm91VMYGCxkpV8tSmJuCzIMUqY7VCO33zAS4rgm5qr0EJLDHiM6aaO+T55R76xkzg6YoSRNbeO49CPexSIA7RXdtgyI0c6EtZxFqvjtmmCBd4P96/cL+Bps1wdiI0obST0MBUeEFziRuE7vqGUVA8FQWuV6p5f+uw1w5N6WATV7Aw2jBMoGWf92xOu1qYwh5dlTqgM398bNyEvzUkkfHk5QbUslJf8ZV7eROu2IM3fK9PJc1/hKlVNowp0PjWhcePJUAyejGRoU54Bbs19ozIHfGgHcf7Z8A+lEyV2bkmiy3gBZG0XfdJR45R7zYpSHJiEr9Gk35zFk3CnLJO6DC4=
 after_success:
 - coveralls
