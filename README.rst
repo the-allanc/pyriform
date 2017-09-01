@@ -32,7 +32,7 @@
 .. |License| image:: https://img.shields.io/pypi/l/pyriform.svg?style=flat
     :target: license_
     :alt: License
-.. |Code Climate| image:: https://codeclimate.com/github/the-allanc/pyriform/badges/gpa.svg
+.. |Code Climate| image:: https://img.shields.io/codeclimate/issues/github/the-allanc/pyriform.svg
     :target: codeclimate_
     :alt: Code Climate
 
