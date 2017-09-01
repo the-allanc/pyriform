@@ -14,22 +14,22 @@
 .. _travis: https://travis-ci.org/the-allanc/pyriform
 .. _codeclimate: https://codeclimate.com/github/the-allanc/pyriform
 
-.. |Build Status| image:: https://img.shields.io/travis/the-allanc/pyriform.svg?style=flat
+.. |Build Status| image:: https://img.shields.io/travis/the-allanc/pyriform.svg
     :target: travis_
     :alt: Build Status
-.. |Coverage| image:: https://img.shields.io/coveralls/the-allanc/pyriform.svg?style=flat
+.. |Coverage| image:: https://img.shields.io/coveralls/the-allanc/pyriform.svg
     :target: coveralls_
     :alt: Coverage
 .. |Docs| image:: https://readthedocs.org/projects/pyriform/badge/?version=stable&style=flat
     :target: documentation_
     :alt: Docs
-.. |Release Version| image:: https://img.shields.io/pypi/pyversions/pyriform.svg?style=flat
+.. |Release Version| image:: https://img.shields.io/pypi/pyversions/pyriform.svg
     :target: pypi_
     :alt: Release Version
-.. |Python Version| image:: https://img.shields.io/pypi/v/pyriform.svg?style=flat
+.. |Python Version| image:: https://img.shields.io/pypi/v/pyriform.svg
     :target: pypi_
     :alt: Python Version
-.. |License| image:: https://img.shields.io/pypi/l/pyriform.svg?style=flat
+.. |License| image:: https://img.shields.io/pypi/l/pyriform.svg
     :target: license_
     :alt: License
 .. |Code Climate| image:: https://img.shields.io/codeclimate/issues/github/the-allanc/pyriform.svg
