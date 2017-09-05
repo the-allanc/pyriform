@@ -293,3 +293,11 @@ class TestPyriform(object):
         assert wait <= 5, 'all content is being read before streaming starts'
         assert wait <= 2.5, 'reading content took longer than expected'
         assert wait >= 1, 'resource did not appear to be delaying content'
+
+    def test_multiple_cookies(self):
+        session = Session()
+        session.mount('http://localhost', WSGIAdapter(binapp))
+        session.get("http://localhost/cookies/set?flimble=floop&flamble=flaap")
+        response = session.get("http://localhost/cookies")
+        assert response.json() == {'cookies': {'flimble': 'floop', 'flamble': 'flaap'}}
+
