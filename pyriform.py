@@ -51,14 +51,21 @@ class WSGIAdapter(BaseAdapter):
             Alternatively, you can pass a :py:class:`~webtest.app.TestApp` object.
         extra_environ (dict of string -> string): Extra environment values that
             the WSGI app will inherit for every request that it handles.
+        lint (boolean): Enables the :py:mod:`webtest.lint` module for the WSGI application.
+
+            By default, this is disabled - it's useful if you want to test the WSGI app itself,
+            but not if you are testing client-side behaviour.
     '''
-    def __init__(self, app, extra_environ=None):
+    def __init__(self, app, extra_environ=None, lint=False):
         super(BaseAdapter, self).__init__()
         if not isinstance(app, TestApp):
-            app = TestApp(app, extra_environ=extra_environ)
+            app = TestApp(app, extra_environ=extra_environ, lint=lint)
             app.RequestClass = PyriformTestRequest
         elif extra_environ:
             raise ValueError('cannot pass extra_environ and a TestApp instance'
+                             ' at the same time')
+        elif lint:
+            raise ValueError('cannot use lint and pass a TestApp instance'
                              ' at the same time')
         self.app = app
 

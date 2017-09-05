@@ -1,3 +1,8 @@
+0.4.1
+=====
+
+* Added lint argument to :py:class:`~.WSGIAdapter`.
+
 0.4
 ===
 
