@@ -4,6 +4,7 @@ from requests.adapters import BaseAdapter, Response
 from requests import Session, Timeout
 from six.moves.urllib.parse import urlparse
 import six
+from urllib3.response import HTTPHeaderDict
 import warnings
 from webtest.app import TestApp, TestRequest
 from webtest.response import TestResponse
@@ -118,9 +119,16 @@ class WSGIAdapter(BaseAdapter):
         resp.reason = wtresp.status.split(' ', 1)[1]
         resp.url = request.url
 
-        for key, value in wtresp.headerlist:
-            if key not in resp.headers:
-                resp.headers[key] = value
+        # Although HTTPHeaderDict is better positioned to handle multiple headers with the same
+        # name, requests doesn't use this type for responses. Instead, it uses its own dictionary
+        # type for headers (which doesn't have multiple header value support).
+        #
+        # But because it uses the HTTPHeaderDict object, all multiple value headers will be
+        # compiled together, so that's what we store here (to be consistent with requests).
+        #
+        # It would be nice to use HTTPHeaderDict for the response, but we don't want to provide a
+        # different object with a different API.
+        resp.headers.update(HTTPHeaderDict(wtresp.headerlist))
 
         resp.request = request
         resp.raw = IterStringIO(wtresp._app_iter)

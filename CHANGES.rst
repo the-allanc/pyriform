@@ -1,6 +1,8 @@
-0.4.1
-=====
+0.5
+===
 
+* Handle multiple response headers with the same name in a consistent way to how
+  the standard requests adapter works (by compiling the headers together).
 * Added lint argument to :py:class:`~.WSGIAdapter`.
 
 0.4

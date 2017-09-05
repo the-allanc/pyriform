@@ -158,12 +158,12 @@ class TestPyriform(object):
 
     def test_response_headers(self):
         # Test that we get a header back in the response, but duplicate headers
-        # shouldn't cause anything to break. Requests doesn't seem to support
-        # duplicate headers in the response anyway.
+        # shouldn't cause anything to break. Requests doesn't support duplicate
+        # headers directly - it relies on urllib3 to compile the headers together.
         url = 'http://myapp.local/response-headers?X-Men=Xavier&X-Men=Cyclops'
         resp = self.session.get(url)
         resp.raise_for_status()
-        assert resp.headers['X-Men'] in ('Xavier', 'Cyclops')
+        assert resp.headers['X-Men'] == 'Xavier, Cyclops'
 
     @pytest.mark.parametrize('redir_type', [
         'relative-redirect', 'absolute-redirect',
@@ -300,4 +300,3 @@ class TestPyriform(object):
         session.get("http://localhost/cookies/set?flimble=floop&flamble=flaap")
         response = session.get("http://localhost/cookies")
         assert response.json() == {'cookies': {'flimble': 'floop', 'flamble': 'flaap'}}
-
