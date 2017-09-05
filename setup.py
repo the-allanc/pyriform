@@ -35,7 +35,7 @@ description = get_description()
 
 params = dict(
     name=name,
-    version='0.4',
+    version='0.5',
     author="Allan Crooks",
     author_email="allan@increment.one",
     description=summary or name,
