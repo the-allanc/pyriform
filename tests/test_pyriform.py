@@ -236,6 +236,10 @@ class TestPyriform(object):
         with pytest.raises(ValueError):
             WSGIAdapter(TestApp(binapp), {'HTTP_HOST': 'thisapp.local'})
 
+        with pytest.raises(ValueError):
+            # Also test the lint argument too.
+            WSGIAdapter(TestApp(binapp), lint=True)
+
     def test_custom_status_reason(self):
         # We'll create a custom CherryPy app to do this.
         class MyReason(object):
@@ -300,3 +304,16 @@ class TestPyriform(object):
         session.get("http://localhost/cookies/set?flimble=floop&flamble=flaap")
         response = session.get("http://localhost/cookies")
         assert response.json() == {'cookies': {'flimble': 'floop', 'flamble': 'flaap'}}
+
+    def test_warn_if_streaming_with_custom_testapp(self):
+        # Show that we generate a warning if you try to stream content, but you've set up the
+        # adapter in a way which prevents us from streaming it in real time.
+        from webtest.app import TestApp
+        session = make_session(TestApp(binapp))
+        with pytest.warns(RuntimeWarning) as w:
+            session.get('http://httpbin/image/png', stream=True)
+
+        assert str(w[0].message) == (
+            'Passing a TestApp instance to WSGIAdapter prevents '
+            'streamed requests from streaming content in real time.'
+        )

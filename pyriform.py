@@ -95,7 +95,8 @@ class WSGIAdapter(BaseAdapter):
 
         if stream and not issubclass(self.app.RequestClass, PyriformTestRequest):
             warnings.warn('Passing a TestApp instance to WSGIAdapter prevents '
-                          'streamed requests from streaming content in real time.')
+                          'streamed requests from streaming content in real time.',
+                          RuntimeWarning)
 
         # Delegate to the appropriate handler if we have one.
         if request.method in non_body_methods or \
@@ -191,13 +192,13 @@ class IterStringIO(TextIOBase):
         self.iterable = iterable
         self.iter = it.chain.from_iterable(iterable)
 
-    def not_newline(self, s):
+    def not_newline(self, s):  # pragma: no cover
         return s not in {'\n', '\r', '\r\n'}
 
     def read(self, n=None):
         return _join_bytes(it.islice(self.iter, None, n))
 
-    def readline(self, n=None):
+    def readline(self, n=None):  # pragma: no cover
         to_read = it.takewhile(self.not_newline, self.iter)
         return _join_bytes(it.islice(to_read, None, n))
 
