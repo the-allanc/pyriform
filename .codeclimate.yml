@@ -3,5 +3,3 @@ engines:
     enabled: true
     config:
       threshold: "C"
-  pylint:
-    enabled: true
