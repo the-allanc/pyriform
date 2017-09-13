@@ -1,0 +1,6 @@
+[MESSAGES CONTROL]
+disable=W,C,design
+
+[TYPECHECK]
+ignore=docs,tests
+ignored-modules=six
