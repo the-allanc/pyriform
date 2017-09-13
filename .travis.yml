@@ -11,8 +11,10 @@ script:
 - python setup.py checkdocs
 - py.test --cov pyriform
 - sphinx-build -W docs/ build/docs/
+- pylint --disable=W pyriform.py
 after_script:
 - flake8
+- pylint pyriform.py
 branches:
   except:
   - skeleton
