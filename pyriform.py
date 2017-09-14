@@ -58,7 +58,7 @@ class WSGIAdapter(BaseAdapter):
             but not if you are testing client-side behaviour.
     '''
     def __init__(self, app, extra_environ=None, lint=False):
-        super(BaseAdapter, self).__init__()
+        super(WSGIAdapter, self).__init__()
         if not isinstance(app, TestApp):
             app = TestApp(app, extra_environ=extra_environ, lint=lint)
             app.RequestClass = PyriformTestRequest
@@ -164,7 +164,7 @@ class WSGIAdapter(BaseAdapter):
             result[1] = True  # tell the thread we don't want the result
             raise Timeout()
         if isinstance(result[0], Exception):  # pragma: no cover
-            raise result[0]
+            raise result[0] # pragma: no cover
         return result[0]
 
 
