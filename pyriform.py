@@ -164,7 +164,7 @@ class WSGIAdapter(BaseAdapter):
             result[1] = True  # tell the thread we don't want the result
             raise Timeout()
         if isinstance(result[0], Exception):  # pragma: no cover
-            raise result[0] # pragma: no cover
+            raise result[0]  # pylint: disable=raising-bad-type
         return result[0]
 
 
